@@ -1,6 +1,6 @@
-# $Id: DCC.pm,v 1.7 2003/04/01 16:14:54 matt Exp $
+# $Id: DCCIf.pm,v 1.4 2004/02/11 14:36:48 matt Exp $
 
-package Net::DCCIfIf;
+package Net::DCCIf;
 use strict;
 
 use IO::Socket;
@@ -10,7 +10,7 @@ use Symbol qw(gensym);
 
 use vars qw($VERSION);
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 my %result_map = (
     A => 'Accept',
@@ -76,7 +76,7 @@ sub connect {
                 );
     
     if (!ref($opts{env_to})) {
-        $opts{env_to} = [$opts{env_to}];
+        $opts{env_to} = $opts{env_to} ? [$opts{env_to}] : [];
     }
     
     $self->{env_to} = $opts{env_to};
@@ -115,6 +115,7 @@ sub dcc_fh {
 
 sub send {
     my ($self, $type, @data) = @_;
+    # warn("send $type:", join('', @data)) if $type ne 'body';
     $self->{server}->syswrite(join('', @data)) || die "socket write failed at $type: $!";
 }
 
